@@ -4,27 +4,29 @@ import { Store } from '@ngrx/store';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { BackendService } from '../services/backend.service';
-import { CowItems } from '../models/cow-models';
+import { CowItems } from '../../../../shared/models/cow-models';
 import {
   CowActionTypes,
   GetCows,
   GetCowsSuccess,
-  GetCowsError,
   DelCowById,
   DelCowByIdSuccess,
-  DelCowByIdError,
   UpdateCow,
   UpdateCowSuccess,
-  UpdateCowError,
+  CreateCow,
   CreateCowSuccess,
-  CreateCowError
+  CowError,
 } from '../actions/cow-actions';
+import { State } from '../reducers';
 
 @Injectable()
 export class CowEffects {
+
+  private defaultFilter = {limit: 5, offset: 0};
+
   constructor(
     private readonly actions$: Actions,
-    private readonly store: Store<any>,
+    private readonly store: Store<State>,
     private readonly backendService: BackendService
   ) {}
 
@@ -36,7 +38,7 @@ export class CowEffects {
           return new GetCowsSuccess(cows);
         }),
         catchError(error => {
-          return of(new GetCowsError(error));
+          return of(new CowError(error));
         })
       )
     )
@@ -46,42 +48,51 @@ export class CowEffects {
     ofType(CowActionTypes.DelCowById),
     switchMap((action: DelCowById) =>
       this.backendService.delCowById(action.payload).pipe(
-        map((cows: CowItems) => {
-          return new DelCowByIdSuccess(cows);
-        }),
+        map(() => new DelCowByIdSuccess()),
         catchError(error => {
-          return of(new DelCowByIdError(error));
+          return of(new CowError(error));
         })
       )
     )
+  );
+
+  @Effect() delCowByIdSuccess$ = this.actions$.pipe(
+    ofType(CowActionTypes.DelCowByIdSuccess),
+    map(() => new GetCows(this.defaultFilter))
   );
 
   @Effect() updateCow$ = this.actions$.pipe(
     ofType(CowActionTypes.UpdateCow),
     switchMap((action: UpdateCow) =>
       this.backendService.updateCow(action.payload).pipe(
-        map((cows: CowItems) => {
-          return new UpdateCowSuccess(cows);
-        }),
+        map(() => new UpdateCowSuccess()),
         catchError(error => {
-          return of(new UpdateCowError(error));
+          return of(new CowError(error));
         })
       )
     )
   );
 
+  @Effect() updateCowSuccess$ = this.actions$.pipe(
+    ofType(CowActionTypes.UpdateCowSuccess),
+    map(() => new GetCows(this.defaultFilter))
+  );
+
   @Effect() createCow$ = this.actions$.pipe(
     ofType(CowActionTypes.CreateCow),
-    switchMap((action: UpdateCow) =>
+    switchMap((action: CreateCow) =>
       this.backendService.createCow(action.payload).pipe(
-        map((cows: CowItems) => {
-          return new CreateCowSuccess(cows);
-        }),
+        map(() => new CreateCowSuccess()),
         catchError(error => {
-          return of(new CreateCowError(error));
+          return of(new CowError(error));
         })
       )
     )
+  );
+
+  @Effect() createCowSuccess$ = this.actions$.pipe(
+    ofType(CowActionTypes.CreateCowSuccess),
+    map(() => new GetCows(this.defaultFilter))
   );
 
 }

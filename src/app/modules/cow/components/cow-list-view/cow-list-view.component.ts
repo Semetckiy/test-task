@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { CreateCow, DelCowById, GetCows, UpdateCow } from '../../redux/actions/cow-actions';
-import { CowFilter } from '../../redux/models/cow-models';
+import { CowFilter } from '../../../../shared/models/cow-models';
 import { cows } from '../../redux/reducers';
 import { Observable } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
@@ -66,7 +66,8 @@ export class CowListViewComponent implements OnInit {
     obj.action = action;
     const dialogRef = this.dialog.open(ActionDialogComponent, {
       width: '300px',
-      data: obj
+      data: obj,
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {

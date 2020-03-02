@@ -1,0 +1,107 @@
+<ng-container *ngIf="(cows$ | async) as cows;">
+
+  <ng-container *ngIf="cows.data.isLoading">
+    <label>Loading...</label>
+  </ng-container>
+
+  <ng-container *ngIf="!cows.data.isLoading">
+
+    <ng-container *ngIf="cows.data.error">
+      <label>something went wrong</label>
+    </ng-container>
+
+    <div class="mat-elevation-z8">
+
+      <button mat-button (click)="openDialog('Add',{})" mat-flat-button color="primary" style="margin: 25px;">Create new cow</button>
+
+      <table mat-table [dataSource]="cows.data.cows.result">
+
+        <ng-container matColumnDef="cowId">
+          <th mat-header-cell *matHeaderCellDef> cowId </th>
+          <td mat-cell *matCellDef="let element"> {{element.cowId}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="healthIndex">
+          <th mat-header-cell *matHeaderCellDef> healthIndex </th>
+          <td mat-cell *matCellDef="let element"> {{element.healthIndex}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="endDate">
+          <th mat-header-cell *matHeaderCellDef> endDate </th>
+          <td mat-cell *matCellDef="let element"> {{element.endDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="minValueDateTime">
+          <th mat-header-cell *matHeaderCellDef> minValueDateTime </th>
+          <td mat-cell *matCellDef="let element"> {{ element.minValueDateTime | timestampToDate }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef> type </th>
+          <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="animalId">
+          <th mat-header-cell *matHeaderCellDef> animalId </th>
+          <td mat-cell *matCellDef="let element"> {{element.animalId}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="eventId">
+          <th mat-header-cell *matHeaderCellDef> eventId </th>
+          <td mat-cell *matCellDef="let element"> {{element.eventId}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="deletable">
+          <th mat-header-cell *matHeaderCellDef> deletable </th>
+          <td mat-cell *matCellDef="let element"> {{element.deletable}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lactationNumber">
+          <th mat-header-cell *matHeaderCellDef> lactationNumber </th>
+          <td mat-cell *matCellDef="let element"> {{element.lactationNumber}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="daysInLactation">
+          <th mat-header-cell *matHeaderCellDef> daysInLactation </th>
+          <td mat-cell *matCellDef="let element"> {{element.daysInLactation}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ageInDays">
+          <th mat-header-cell *matHeaderCellDef> ageInDays </th>
+          <td mat-cell *matCellDef="let element"> {{element.ageInDays}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="startDateTime">
+          <th mat-header-cell *matHeaderCellDef> startDateTime </th>
+          <td mat-cell *matCellDef="let element"> {{element.startDateTime | timestampToDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reportingDateTime">
+          <th mat-header-cell *matHeaderCellDef> reportingDateTime </th>
+          <td mat-cell *matCellDef="let element"> {{element.reportingDateTime | timestampToDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef> actions </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <a (click)="openDialog('Update', element)" style="color: blue">Edit</a> |
+            <a (click)="openDialog('Delete', element)" style="color: blue">Delete</a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="cows.data.cows.total"
+        [pageSize]="cows.data.cows.limit"
+        [pageSizeOptions]="[5, 10, 20, 100]"
+        (page)="paginate($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
+  </ng-container>
+
+</ng-container>

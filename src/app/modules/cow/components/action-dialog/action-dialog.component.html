@@ -1,0 +1,71 @@
+<div mat-dialog-content>
+
+  <ng-container *ngIf="action != 'Delete'; else elseTemplate">
+
+    <label *ngIf="action != 'Add'">Cow id - {{ localData.cowId }}</label>
+    <label *ngIf="action != 'Update'">Create new cow</label>
+
+    <div style="margin-top: 25px;">
+
+      <form [formGroup]="cowForm">
+
+        <mat-form-field class="width-100">
+          <input placeholder="healthIndex" matInput formControlName="healthIndex">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="endDate" matInput formControlName="endDate">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="minValueDateTime" matInput formControlName="minValueDateTime">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="type" matInput formControlName="type">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="animalId" matInput formControlName="animalId">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="eventId" matInput formControlName="eventId">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="lactationNumber" matInput formControlName="lactationNumber">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="daysInLactation" matInput formControlName="daysInLactation">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="ageInDays" matInput formControlName="ageInDays">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="startDateTime" matInput formControlName="startDateTime">
+        </mat-form-field>
+
+        <mat-form-field class="width-100">
+          <input placeholder="reportingDateTime" matInput formControlName="reportingDateTime">
+        </mat-form-field>
+
+        <mat-checkbox class="width-100" formControlName="deletable">deletable</mat-checkbox>
+
+      </form>
+
+    </div>
+
+  </ng-container>
+
+  <ng-template #elseTemplate>
+    Sure to delete cow with id <b>{{ localData.cowId }}</b>?
+  </ng-template>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="doAction()">{{ action }}</button>
+  <button mat-button (click)="closeDialog()" mat-flat-button>Cancel</button>
+</div>
